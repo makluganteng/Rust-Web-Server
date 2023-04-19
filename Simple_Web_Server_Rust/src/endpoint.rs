@@ -1,6 +1,6 @@
 //Place to declare endpoints
 use serde::{Deserialize};
-use rocket::serde::json::Json;
+use rocket::{serde::json::Json, http::Status};
 #[derive(Debug, Deserialize)]
 pub struct Data {
     name: String,
@@ -17,6 +17,11 @@ pub fn index2() -> &'static str {
     "Hello, Valentino!"
 }
 
+#[get("/id/<code>")]
+pub fn forced_error(code: u16) -> Status {
+    Status::new(code)
+}
+
 #[post("/test", data = "<post>", format = "json")]
 pub fn test(post: Option<Json<Data>>) -> String {
     match post {
@@ -28,7 +33,7 @@ pub fn test(post: Option<Json<Data>>) -> String {
     }
 }
 
-// #[post("/test2", data = "<post>")]
-// pub fn test2(post: Json<Post>) -> Json<Post> {
-//     post
-// }
+#[catch(404)]
+pub fn not_found(req: &rocket::Request<'_>) -> String {
+    format!("I couldn't find '{}'. Try something else?", req.uri())
+}
