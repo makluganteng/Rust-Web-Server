@@ -1,5 +1,17 @@
 #[macro_use] extern crate rocket;
-mod endpoint;
+mod routes {
+    pub mod endpoint;
+    pub mod user;
+}
+mod models {
+    pub mod models;
+}
+
+mod services {
+    pub mod users;
+}
+
+use routes::endpoint;
 use endpoint::index;
 use endpoint::index2;
 use endpoint::test;
